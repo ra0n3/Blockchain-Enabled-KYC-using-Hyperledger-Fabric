@@ -1,0 +1,124 @@
+version: '2'
+
+services:
+  bank-ca:
+    container_name: bank-ca
+    extends:
+      file: ./ca-base.yaml
+      service: ca-base
+    image: bank-ca
+    ports:
+    - 7054:7054
+
+  passport-ca:
+    container_name: passport-ca
+    extends:
+      file: ./ca-base.yaml
+      service: ca-base
+    image: passport-ca
+    ports:
+    - 8054:7054
+
+  govt-ca:
+    container_name: govt-ca
+    extends:
+      file: ./ca-base.yaml
+      service: ca-base
+    image: govt-ca
+    ports:
+    - 9054:7054
+
+
+  orderer0:
+    container_name: orderer0
+    image: orderer
+    environment:
+    - ORDERER_GENERAL_LOGLEVEL=debug
+    - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+    - ORDERER_GENERAL_GENESISMETHOD=file
+    - ORDERER_GENERAL_GENESISFILE=/orderer/crypto/genesis.block
+    - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+    - ORDERER_GENERAL_LOCALMSPDIR=/orderer/crypto/msp
+    - ORDERER_GENERAL_TLS_ENABLED=true
+    - ORDERER_GENERAL_TLS_PRIVATEKEY=/orderer/crypto/tls/server.key
+    - ORDERER_GENERAL_TLS_CERTIFICATE=/orderer/crypto/tls/server.crt
+    - ORDERER_GENERAL_TLS_ROOTCAS=[/orderer/crypto/tls/ca.crt]
+    working_dir: /orderer
+    command: orderer
+    ports:
+    - 7050:7050
+
+  bank-peer:
+    container_name: bank-peer
+    extends:
+      file: ./peer-base.yaml
+      service: peer-base
+    image: bank-peer
+    environment:
+    - CORE_PEER_ID=bank-peer
+    - CORE_PEER_ADDRESS=bank-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=bank-peer:7051
+    - CORE_PEER_LOCALMSPID=BankOrgMSP
+    ports:
+    - 7051:7051
+    - 7053:7053
+    depends_on:
+    - orderer0
+
+  passport-peer:
+    container_name: passport-peer
+    extends:
+      file: ./peer-base.yaml
+      service: peer-base
+    image: passport-peer
+    environment:
+    - CORE_PEER_ID=passport-peer
+    - CORE_PEER_ADDRESS=passport-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=passport-peer:7051
+    - CORE_PEER_LOCALMSPID=PassportOrgMSP
+    ports:
+    - 8051:7051
+    - 8053:7053
+    depends_on:
+    - orderer0
+    - bank-peer
+
+  govt-peer:
+    container_name: govt-peer
+    extends:
+      file: ./peer-base.yaml
+      service: peer-base
+    image: govt-peer
+    environment:
+    - CORE_PEER_ID=govt-peer
+    - CORE_PEER_ADDRESS=govt-peer:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=govt-peer:7051
+    - CORE_PEER_LOCALMSPID=GovtShopOrgMSP
+    ports:
+    - 9051:7051
+    - 9053:7053
+    depends_on:
+    - orderer0
+    - bank-peer
+    - passport-peer
+
+
+  web:
+    container_name: web
+    image: web
+    environment:
+    - PORT=3000
+    - DOCKER_SOCKET_PATH=/host/var/run/docker.sock
+    - DOCKER_CCENV_IMAGE=hyperledger/fabric-ccenv:latest
+    ports:
+    - 3000:3000
+    volumes:
+    - /var/run/:/host/var/run/
+    depends_on:
+    - orderer0
+    - bank-ca
+    - bank-peer
+    - passport-ca
+    - passport-peer
+    - govt-ca
+    - govt-peer

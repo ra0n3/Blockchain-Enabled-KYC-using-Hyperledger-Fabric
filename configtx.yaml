@@ -1,0 +1,63 @@
+---
+Profiles:
+  ThreeOrgsGenesis:
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+      - *OrdererOrg
+    Consortiums:
+      InsuranceConsortium:
+        Organizations:
+        - *BankOrg
+        - *PassportOrg
+        - *GovtOrg
+  ThreeOrgsChannel:
+    Consortium: KYCConsortium
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+      - *BankOrg
+      - *PassportOrg
+      - *GovtOrg
+
+Organizations:
+- &OrdererOrg
+  Name: OrdererOrg
+  ID: OrdererMSP
+  MSPDir: cli/peers/ordererOrganizations/orderer-org/msp
+- &BankOrg
+  Name: BankOrgMSP
+  ID: BankOrgMSP
+  MSPDir: cli/peers/peerOrganizations/bank-org/msp
+  AnchorPeers:
+  - Host: bank-peer
+    Port: 7051
+- &PassportOrg
+  Name: PassportOrgMSP
+  ID: PassportOrgMSP
+  MSPDir: cli/peers/peerOrganizations/passport-org/msp
+  AnchorPeers:
+  - Host: passport-peer
+    Port: 7051
+- &GovtOrg
+  Name: GovtOrgMSP
+  ID: GovtOrgMSP
+  MSPDir: cli/peers/peerOrganizations/govt-org/msp
+  AnchorPeers:
+  - Host: govt-peer
+    Port: 7051
+
+
+Orderer: &OrdererDefaults
+  OrdererType: solo
+  Addresses:
+  - orderer0:7050
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Organizations:
+
+Application: &ApplicationDefaults
+  Organizations:

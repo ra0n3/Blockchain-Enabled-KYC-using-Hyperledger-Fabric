@@ -1,0 +1,23 @@
+OrdererOrgs:
+- Name: OrdererOrg
+  Domain: orderer-org
+  CommonName: orderer-org
+  Specs:
+  - Hostname: orderer0
+    CommonName: "{{.Hostname}}"
+PeerOrgs:
+- Name: BankOrg
+  Domain: bank-org
+  Specs:
+  - Hostname: bank-peer
+    CommonName: "{{.Hostname}}"
+- Name: PassportkOrg
+  Domain: passport-org
+  Specs:
+  - Hostname: passport-peer
+    CommonName: "{{.Hostname}}"
+- Name: GovtOrg
+  Domain: govt-org
+  Specs:
+  - Hostname: govt-peer
+    CommonName: "{{.Hostname}}"
