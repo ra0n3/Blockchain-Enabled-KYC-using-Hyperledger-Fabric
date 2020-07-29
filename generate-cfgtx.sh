@@ -3,6 +3,7 @@
 CHANNEL_NAME="default"
 PROJPATH=$(pwd)
 CLIPATH=$PROJPATH/cli/peers
+chmod +x configtxgen
 
 echo
 echo "##########################################################"

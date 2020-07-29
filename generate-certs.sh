@@ -12,7 +12,11 @@ PEERS=$CLIPATH/peerOrganizations
 
 rm -rf $CLIPATH
 
+chmod +x cryptogen
+
 $PROJPATH/cryptogen generate --config=$PROJPATH/crypto-config.yaml --output=$CLIPATH
+
+chmod +x generate-cfgtx
 
 sh generate-cfgtx.sh
 
