@@ -16,7 +16,7 @@ chmod +x cryptogen
 
 $PROJPATH/cryptogen generate --config=$PROJPATH/crypto-config.yaml --output=$CLIPATH
 
-chmod +x generate-cfgtx
+chmod +x generate-cfgtx.sh
 
 sh generate-cfgtx.sh
 
