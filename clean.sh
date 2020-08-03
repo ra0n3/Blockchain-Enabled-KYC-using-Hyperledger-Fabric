@@ -9,7 +9,7 @@ do
 done
 
 #docker rmi -f $(docker images | grep none)
-images=( dev-govr-peer dev-bank-peer dev-passport-peer)
+images=( dev-govt-peer dev-bank-peer dev-passport-peer)
 for i in "${images[@]}"
 do
 	echo Removing image : $i
