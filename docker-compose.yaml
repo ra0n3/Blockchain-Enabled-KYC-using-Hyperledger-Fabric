@@ -93,7 +93,7 @@ services:
     - CORE_PEER_ID=govt-peer
     - CORE_PEER_ADDRESS=govt-peer:7051
     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=govt-peer:7051
-    - CORE_PEER_LOCALMSPID=GovtShopOrgMSP
+    - CORE_PEER_LOCALMSPID=GovtOrgMSP
     ports:
     - 9051:7051
     - 9053:7053

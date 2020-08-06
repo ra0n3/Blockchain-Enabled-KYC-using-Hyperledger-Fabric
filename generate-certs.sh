@@ -76,7 +76,7 @@ rm -rf $WEBCERTS
 mkdir -p $WEBCERTS
 cp $PROJPATH/orderer/crypto/tls/ca.crt $WEBCERTS/ordererOrg.pem
 cp $PROJPATH/bankPeer/crypto/tls/ca.crt $WEBCERTS/bankOrg.pem
-cp $PROJPATH/passportPeer/crypto/tls/ca.crt $WEBCERTS/policeOrg.pem
+cp $PROJPATH/passportPeer/crypto/tls/ca.crt $WEBCERTS/passportOrg.pem
 cp $PROJPATH/govtPeer/crypto/tls/ca.crt $WEBCERTS/govtOrg.pem
 
 cp $PEERS/bank-org/users/Admin@bank-org/msp/keystore/* $WEBCERTS/Admin@bank-org-key.pem

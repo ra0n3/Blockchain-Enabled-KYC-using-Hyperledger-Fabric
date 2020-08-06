@@ -6,7 +6,7 @@ Profiles:
       Organizations:
       - *OrdererOrg
     Consortiums:
-      InsuranceConsortium:
+      KYCConsortium:
         Organizations:
         - *BankOrg
         - *PassportOrg
