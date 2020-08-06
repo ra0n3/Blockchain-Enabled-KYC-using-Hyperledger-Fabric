@@ -275,6 +275,18 @@ router.get('*', (req, res) => {
   });
 });
 
+router.post('/api/getRegistered', function(req, res, next){
+  BankPeer.createUser(req.body).then(function(bank){
+      res.send(bank);
+  }).catch(next);
+});
+
+router.post('/api/getUser', function(req, res, next){
+  BankPeer.getUser(req.body).then(function(bank){
+      res.send(bank);
+  }).catch(next);
+});
+
 function wsConfig(io) {
   BankPeer.on('block', block => {
     io.emit('block', block);

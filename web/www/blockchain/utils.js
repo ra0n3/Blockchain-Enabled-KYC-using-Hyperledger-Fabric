@@ -308,7 +308,7 @@ export class OrganizationClient extends EventEmitter {
     }
   }
 
-  async invoke(chaincodeId, chaincodeVersion, fcn, ...args) {
+  async invoke(chaincodeId, chaincodeVersion, fcn, args) {
     let proposalResponses, proposal;
     const txId = this._client.newTransactionID();
     try {
@@ -316,7 +316,7 @@ export class OrganizationClient extends EventEmitter {
         chaincodeId,
         chaincodeVersion,
         fcn,
-        args: marshalArgs(args),
+        args: args,
         txId
       };
       const results = await this._channel.sendTransactionProposal(request);
@@ -382,7 +382,7 @@ export class OrganizationClient extends EventEmitter {
       chaincodeId,
       chaincodeVersion,
       fcn,
-      args: marshalArgs(args),
+      args: args,
       txId: this._client.newTransactionID(),
     };
     return unmarshalResult(await this._channel.queryByChaincode(request));

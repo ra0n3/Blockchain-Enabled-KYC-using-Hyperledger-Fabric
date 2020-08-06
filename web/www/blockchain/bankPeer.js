@@ -166,18 +166,44 @@ export async function createUser(user) {
   if (!isReady()) {
     return;
   }
+  console.log(user);
+  console.log(user.Username);
+
+  var args = [user.firstName, user.lastName, user.Username];
   try {
-    const loginInfo = await invoke('user_create', user);
-    if (!loginInfo ^
-      !!(loginInfo && loginInfo.username && loginInfo.password)) {
+    const loginInfo = await invoke('setUser', args);
+    console.log("===================================");
+    console.log(loginInfo);
+    console.log("===================================");
+    if (loginInfo) {
       return loginInfo;
-    } else {
-      throw new Error(loginInfo);
     }
   } catch (e) {
     throw wrapError(`Error creating user: ${e.message}`, e);
   }
 }
+
+export async function getUser(user) {
+  if (!isReady()) {
+    return;
+  }
+  console.log(user.Username);
+
+  // var args = [user.firstName, user.lastName, user.Username];
+  var args = [ user.Username ];
+  try {
+    const loginInfo = await invoke('getUser', args);
+    console.log("===================================");
+    console.log(loginInfo);
+    console.log("===================================");
+    if (loginInfo) {
+      return loginInfo;
+    }
+  } catch (e) {
+    throw wrapError(`Error creating user: ${e.message}`, e);
+  }
+}
+
 
 export function getBlocks(noOfLastBlocks) {
   return client.getBlocks(noOfLastBlocks);
@@ -193,19 +219,19 @@ export const removeListener = client.removeListener.bind(client);
 const peerType = 'kycApp-admin'
 let isQuery = false;
 
-async function invoke(fcn, ...args) {
+async function invoke(fcn, args) {
 
   isQuery = false;
-
-  console.log(`args in bankPeer invoke: ${util.inspect(...args)}`)
+  console.log(args)
+  console.log(`args in bankPeer invoke: ${util.inspect(args)}`)
   console.log(`func in bankPeer invoke: ${util.inspect(fcn)}`)
 
   if (config.isCloud) {
-    await network.invokeCC(isQuery, peerType, fcn, ...args);
+    await network.invokeCC(isQuery, peerType, fcn, args);
   }
   
   return client.invoke(
-    config.chaincodeId, config.chaincodeVersion, fcn, ...args);
+    config.chaincodeId, config.chaincodeVersion, fcn, args);
 }
 
 async function query(fcn, ...args) {

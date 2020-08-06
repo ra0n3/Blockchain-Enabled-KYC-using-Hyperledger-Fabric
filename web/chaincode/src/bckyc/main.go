@@ -62,11 +62,12 @@ func (kyc *KYCChaincode) Init(stub shim.ChaincodeStubInterface) peer.Response {
 	return shim.Success([]byte(jsonUser))
 }
 
+//Invoke to invoke chaincode
 func (kyc *KYCChaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 
 	// Get the function name and parameters
 	function, args := stub.GetFunctionAndParameters()
-
+	fmt.Println(args)
 	fmt.Println("Invoke executed : ", function, " args=", args)
 
 	switch {
@@ -89,7 +90,7 @@ func getUser(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 		return errorResponse("Needs username!!!", 6)
 	}
 
-	user := user{}
+	//user := user{}
 
 	username := args[0]
 	bytes, err := stub.GetState(prefixUser + username)
@@ -97,11 +98,13 @@ func getUser(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 		return errorResponse(err.Error(), 7)
 	}
 
-	_ = json.Unmarshal(bytes, &user)
+	//_ = json.Unmarshal(bytes, &user)
 
-	userMarshed, err := json.Marshal(user)
-	
-	return successResponse(string(userMarshed))
+	//userMarshed, err := json.Marshal(user)
+	return shim.Success([]byte(bytes))
+
+	// return successResponse(string(userMarshed))
+
 	// return successResponse(response)
 }
 
@@ -111,7 +114,9 @@ func setUser(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	// _, args := stub.GetFunctionAndParameters()
 
 	// Check if we received the right number of arguments
+	fmt.Println(len(args))
 	if len(args) < 3 {
+		fmt.Println(len(args))
 		return shim.Error("Failed - incorrect number of parameters!! ")
 	}
 
@@ -127,12 +132,15 @@ func setUser(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	//KEY FOR user representation
 	key := prefixUser + username
 	fmt.Println("Key=", key)
+	fmt.Println(jsonUser)
+	fmt.Println([]byte(jsonUser))
 
 	err := stub.PutState(key, []byte(jsonUser))
 	if err != nil {
 		return errorResponse(err.Error(), 4)
 	}
-
+	// fmt.Println(jsonUser)
+	//fmt.Println(user)
 	return shim.Success([]byte(jsonUser))
 
 }
@@ -148,10 +156,10 @@ func errorResponse(err string, code uint) peer.Response {
 	return shim.Error(errorString)
 }
 
-func successResponse(dat string) peer.Response {
-	success := "{\"response\": " + dat + ", \"code\": 0 }"
-	return shim.Success([]byte(success))
-}
+// func successResponse(dat string) peer.Response {
+// 	success := "{\"response\": " + dat + ", \"code\": 0 }"
+// 	return shim.Success([]byte(success))
+// }
 
 // Chaincode registers with the Shim on startup
 func main() {
