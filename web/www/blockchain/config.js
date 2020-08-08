@@ -14,14 +14,14 @@ const config = {
   chaincodePath: 'bckyc',
   orderer0: {
     hostname: 'orderer0',
-    url: 'grpcs://orderer0:7050',
+    url: 'grpc://orderer0:7050',
     pem: readCryptoFile('ordererOrg.pem')
   },
   bankOrg: {
     peer: {
       hostname: 'bank-peer',
-      url: 'grpcs://bank-peer:7051',
-      eventHubUrl: 'grpcs://bank-peer:7053',
+      url: 'grpc://bank-peer:7051',
+      eventHubUrl: 'grpc://bank-peer:7053',
       pem: readCryptoFile('bankOrg.pem')
     },
     ca: {
@@ -37,8 +37,8 @@ const config = {
   govtOrg: {
     peer: {
       hostname: 'govt-peer',
-      url: 'grpcs://govt-peer:7051',
-      eventHubUrl: 'grpcs://govt-peer:7053',
+      url: 'grpc://govt-peer:7051',
+      eventHubUrl: 'grpc://govt-peer:7053',
       pem: readCryptoFile('govtOrg.pem')
     },
     ca: {
@@ -71,9 +71,9 @@ const config = {
   passportOrg: {
     peer: {
       hostname: 'passport-peer',
-      url: 'grpcs://passport-peer:7051',
+      url: 'grpc://passport-peer:7051',
       pem: readCryptoFile('passportOrg.pem'),
-      eventHubUrl: 'grpcs://passport-peer:7053',
+      eventHubUrl: 'grpc://passport-peer:7053',
     },
     ca: {
       hostname: 'passport-ca',
@@ -92,18 +92,18 @@ if (process.env.LOCALCONFIG) {
 
   config.bankOrg.peer.url = 'grpcs://localhost:7051';
   // config.shopOrg.peer.url = 'grpcs://localhost:8051';
-  config.passportOrg.peer.url = 'grpcs://localhost:9051';
-  config.govtOrg.peer.url = 'grpcs://localhost:10051';
+  config.passportOrg.peer.url = 'grpcs://localhost:8051';
+  config.govtOrg.peer.url = 'grpcs://localhost:9051';
 
   config.bankOrg.peer.eventHubUrl = 'grpcs://localhost:7053';
   // config.shopOrg.peer.eventHubUrl = 'grpcs://localhost:8053';
-  config.passportOrg.peer.eventHubUrl = 'grpcs://localhost:9053';
-  config.govtOrg.peer.eventHubUrl = 'grpcs://localhost:10053';
+  config.passportOrg.peer.eventHubUrl = 'grpcs://localhost:8053';
+  config.govtOrg.peer.eventHubUrl = 'grpcs://localhost:9053';
 
   config.bankOrg.ca.url = 'https://localhost:7054';
   // config.shopOrg.ca.url = 'https://localhost:8054';
-  config.passportOrg.ca.url = 'https://localhost:9054';
-  config.govtOrg.ca.url = 'https://localhost:10054';
+  config.passportOrg.ca.url = 'https://localhost:8054';
+  config.govtOrg.ca.url = 'https://localhost:9054';
 }
 
 export default config;

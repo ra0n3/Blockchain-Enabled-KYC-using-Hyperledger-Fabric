@@ -10,3 +10,5 @@ chmod +x docker-images.sh
 sh ./docker-images.sh
 docker-compose up -d
 
+
+

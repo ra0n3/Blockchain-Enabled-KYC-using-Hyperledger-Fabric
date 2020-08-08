@@ -39,7 +39,7 @@ services:
     - ORDERER_GENERAL_GENESISFILE=/orderer/crypto/genesis.block
     - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
     - ORDERER_GENERAL_LOCALMSPDIR=/orderer/crypto/msp
-    - ORDERER_GENERAL_TLS_ENABLED=true
+    - ORDERER_GENERAL_TLS_ENABLED=false
     - ORDERER_GENERAL_TLS_PRIVATEKEY=/orderer/crypto/tls/server.key
     - ORDERER_GENERAL_TLS_CERTIFICATE=/orderer/crypto/tls/server.crt
     - ORDERER_GENERAL_TLS_ROOTCAS=[/orderer/crypto/tls/ca.crt]

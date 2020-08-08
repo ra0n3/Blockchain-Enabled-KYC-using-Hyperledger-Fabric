@@ -15,3 +15,6 @@ do
 	echo Removing image : $i
   docker rmi -f $(docker images | grep $i )
 done
+
+chmod +x stop-explorer.sh
+./stop-explorer.sh

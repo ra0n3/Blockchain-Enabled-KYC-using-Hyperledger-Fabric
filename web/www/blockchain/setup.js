@@ -240,6 +240,10 @@ function getAdminOrgs() {
       // Initial contract types
       await bankClient.instantiate(config.chaincodeId,
         config.chaincodeVersion ); //, DEFAULT_CONTRACT_TYPES );
+      // await govtClient.instantiate(config.chaincodeId,
+      //   config.chaincodeVersion );
+      // await passportClient.instantiate(config.chaincodeId,
+      //   config.chaincodeVersion );
       console.log('Successfully instantiated chaincode on all peers.');
       setStatus('ready');
     } catch (e) {
