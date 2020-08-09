@@ -192,7 +192,7 @@ export async function getUser(user) {
   // var args = [user.firstName, user.lastName, user.Username];
   var args = [ user.Username ];
   try {
-    const loginInfo = await invoke('getUser', args);
+    const loginInfo = await query('getUser', args);
     console.log("===================================");
     console.log(loginInfo);
     console.log("===================================");
@@ -234,16 +234,16 @@ async function invoke(fcn, args) {
     config.chaincodeId, config.chaincodeVersion, fcn, args);
 }
 
-async function query(fcn, ...args) {
+async function query(fcn, args) {
 
   isQuery = true;
-  console.log(`args in bankPeer query: ${util.inspect(...args)}`)
+  console.log(`args in bankPeer query: ${util.inspect(args)}`)
   console.log(`func in bankPeer query: ${util.inspect(fcn)}`)
 
   if (config.isCloud) {
-    await network.invokeCC(isQuery, peerType, fcn, ...args);
+    await network.invokeCC(isQuery, peerType, fcn, args);
   }
 
   return client.query(
-    config.chaincodeId, config.chaincodeVersion, fcn, ...args);
+    config.chaincodeId, config.chaincodeVersion, fcn, args);
 }

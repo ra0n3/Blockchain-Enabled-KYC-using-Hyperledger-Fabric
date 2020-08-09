@@ -377,7 +377,7 @@ export class OrganizationClient extends EventEmitter {
     }
   }
 
-  async query(chaincodeId, chaincodeVersion, fcn, ...args) {
+  async query(chaincodeId, chaincodeVersion, fcn, args) {
     const request = {
       chaincodeId,
       chaincodeVersion,
