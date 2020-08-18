@@ -108,6 +108,14 @@ if (process.env.LOCALCONFIG) {
 
 export default config;
 
+export const DEFAULT_USERS = 
+  {
+    username : 'admin',
+    firstName : 'admin',
+    lastName : 'admin',
+    password : 'admin'
+  };
+
 // export const DEFAULT_CONTRACT_TYPES = [
 //   {
 //     Number : '0001',

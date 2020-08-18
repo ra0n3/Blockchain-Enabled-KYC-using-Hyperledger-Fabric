@@ -1,6 +1,6 @@
 'use strict';
 
-import config,{ DEFAULT_CONTRACT_TYPES } from './config';
+import config,{ DEFAULT_USERS } from './config';
 import { OrganizationClient } from './utils';
 import http from 'http';
 import url from 'url';
@@ -239,7 +239,7 @@ function getAdminOrgs() {
     try {
       // Initial contract types
       await bankClient.instantiate(config.chaincodeId,
-        config.chaincodeVersion ); //, DEFAULT_CONTRACT_TYPES );
+        config.chaincodeVersion, DEFAULT_USERS );
       // await govtClient.instantiate(config.chaincodeId,
       //   config.chaincodeVersion );
       // await passportClient.instantiate(config.chaincodeId,

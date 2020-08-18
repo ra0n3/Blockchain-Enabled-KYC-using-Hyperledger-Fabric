@@ -9,130 +9,6 @@ import network from './invoke';
 
 import * as util from 'util' // has no default export
 
-// export async function getContractTypes() {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     const contractTypes = await query('contract_type_ls');
-//     return contractTypes;
-//   } catch (e) {
-//     throw wrapError(`Error getting contract types: ${e.message}`, e);
-//   }
-// }
-
-// export async function createContractType(contractType) {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     let ct = contractType.uuid ? contractType :
-//       Object.assign({ uuid: uuidV4() }, contractType);
-//     const successResult = await invoke('contract_type_create', ct);
-//     if (successResult) {
-//       throw new Error(successResult);
-//     }
-//     return ct.uuid;
-//   } catch (e) {
-//     throw wrapError(`Error creating contract type: ${e.message}`, e);
-//   }
-// }
-
-// export async function setActiveContractType(uuid, active) {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     const successResult = await invoke('contract_type_set_active',
-//       { uuid, active });
-//     if (successResult) {
-//       throw new Error(successResult);
-//     }
-//     return successResult;
-//   } catch (e) {
-//     throw wrapError(`Error setting active contract type: ${e.message}`, e);
-//   }
-// }
-
-// export async function getContracts(username) {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     if (typeof username !== 'string') {
-//       username = undefined;
-//     }
-//     const contracts = await query('contract_ls', { username });
-//     return contracts;
-//   } catch (e) {
-//     let errMessage;
-//     if (username) {
-//       errMessage = `Error getting contracts for user ${username}: ${e.message}`;
-//     } else {
-//       errMessage = `Error getting all contracts: ${e.message}`;
-//     }
-//     throw wrapError(errMessage, e);
-//   }
-// }
-
-// export async function getClaims(status) {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     if (typeof status !== 'string') {
-//       status = undefined;
-//     }
-//     const claims = await query('claim_ls', { status });
-//     return claims;
-//   } catch (e) {
-//     let errMessage;
-//     if (status) {
-//       errMessage = `Error getting claims with status ${status}: ${e.message}`;
-//     } else {
-//       errMessage = `Error getting all claims: ${e.message}`;
-//     }
-//     throw wrapError(errMessage, e);
-//   }
-// }
-
-// export async function fileClaim(claim) {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     console.log(`claim: ${util.inspect(claim)}`)
-
-//     const c = Object.assign({}, claim, { uuid: uuidV4() });
-
-//     console.log(`after assigning uuid in fileClaim, c: ${util.inspect(c)}`)
-
-//     const successResult = await invoke('claim_file', c);
-//     console.log(`successResult, after calling invoke claim_file from insurancePeer.js ${util.inspect(successResult)}`)
-//     if (successResult) {
-//       throw new Error(successResult);
-//     }
-//     return c.uuid;
-//   } catch (e) {
-//     throw wrapError(`Error filing a new claim: ${e.message}`, e);
-//   }
-// }
-
-// export async function processClaim(contractUuid, uuid, status, reimbursable) {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     const successResult = await invoke('claim_process', { contractUuid, uuid, status, reimbursable });
-//     if (successResult) {
-//       throw new Error(successResult);
-//     }
-//     return successResult;
-//   } catch (e) {
-//     throw wrapError(`Error processing claim: ${e.message}`, e);
-//   }
-// }
-
 // export async function authenticateUser(username, password) {
 //   if (!isReady()) {
 //     return;
@@ -148,17 +24,17 @@ import * as util from 'util' // has no default export
 //   }
 // }
 
-// export async function getUserInfo(username) {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     const user = await query('user_get_info', { username });
-//     return user;
-//   } catch (e) {
-//     throw wrapError(`Error getting user info: ${e.message}`, e);
-//   }
-// }
+export async function getUserInfo(username) {
+  if (!isReady()) {
+    return;
+  }
+  try {
+    const user = await query('user_get_info',  username );
+    return user;
+  } catch (e) {
+    throw wrapError(`Error getting user info: ${e.message}`, e);
+  }
+}
 
 
 
@@ -166,43 +42,43 @@ export async function createUser(user) {
   if (!isReady()) {
     return;
   }
+
   console.log(user);
   console.log(user.Username);
 
-  var args = [user.firstName, user.lastName, user.Username];
   try {
-    const loginInfo = await invoke('setUser', args);
-    console.log("===================================");
-    console.log(loginInfo);
-    console.log("===================================");
-    if (loginInfo) {
+    const loginInfo = await invoke('user_create', user);
+    if (!loginInfo ^
+      !!(loginInfo && loginInfo.username && loginInfo.password)) {
       return loginInfo;
+    } else {
+      throw new Error(loginInfo);
     }
   } catch (e) {
     throw wrapError(`Error creating user: ${e.message}`, e);
   }
 }
 
-export async function getUser(user) {
-  if (!isReady()) {
-    return;
-  }
-  console.log(user.Username);
+// export async function getUser(user) {
+//   if (!isReady()) {
+//     return;
+//   }
+//   console.log(user.Username);
 
-  // var args = [user.firstName, user.lastName, user.Username];
-  var args = [ user.Username ];
-  try {
-    const loginInfo = await query('getUser', args);
-    console.log("===================================");
-    console.log(loginInfo);
-    console.log("===================================");
-    if (loginInfo) {
-      return loginInfo;
-    }
-  } catch (e) {
-    throw wrapError(`Error creating user: ${e.message}`, e);
-  }
-}
+//   // var args = [user.firstName, user.lastName, user.Username];
+//   var args = [ user.Username ];
+//   try {
+//     const loginInfo = await query('getUser', args);
+//     console.log("===================================");
+//     console.log(loginInfo);
+//     console.log("===================================");
+//     if (loginInfo) {
+//       return loginInfo;
+//     }
+//   } catch (e) {
+//     throw wrapError(`Error creating user: ${e.message}`, e);
+//   }
+// }
 
 
 export function getBlocks(noOfLastBlocks) {
