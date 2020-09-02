@@ -6,26 +6,31 @@ const router = express.Router();
 
 // Render main page
 router.get('/', (req, res) => {
-  res.render('insurance-main', { insuranceActive: true });
+  res.render('bank-main', { insuranceActive: true });
 });
 
-// router.post('/api/authenticate-user', async (req, res) => {
-//   if (!typeof req.body.user === 'object') {
-//     res.json({ error: 'Invalid request!' });
-//     return;
-//   }
+router.post('/api/authenticate-user', async (req, res) => {
+  if (!typeof req.body.user === 'object') {
+    res.json({ error: 'Invalid request!' });
+    return;
+  }
 
-//   try {
-//     const { username, password } = req.body.user;
-//     const success = await InsurancePeer.authenticateUser(username, password);
-//     res.json({ success });
-//     return;
-//   } catch (e) {
-//     console.log(e);
-//     res.json({ error: 'Error accessing blockchain!' });
-//     return;
-//   }
-// });
+  try {
+    console.log("INSIDE API AUTH FUN");
+    console.log(req.body);
+    console.log(req.body);
+    const { username, password } = req.body;
+    console.log("Username in API", username );
+    console.log("Password in API:", password);
+    const success = await BankPeer.authenticateUser(username, password);
+    res.json({ success });
+    //return;
+  } catch (e) {
+    console.log(e);
+    res.json({ error: 'Error accessing blockchain!' });
+    return;
+  }
+});
 
 router.post('/api/register-user', async (req, res) => {
   let  user  = req.body;
@@ -124,7 +129,7 @@ router.post('/api/blocks', async (req, res) => {
 
 // Otherwise redirect to the main page
 router.get('*', (req, res) => {
-  res.render('insurance', {
+  res.render('bank', {
     insuranceActive: true,
     selfServiceActive: req.originalUrl.includes('self-service'),
     claimProcessingActive: req.originalUrl.includes('claim-processing'),

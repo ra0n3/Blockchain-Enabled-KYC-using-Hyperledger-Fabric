@@ -241,7 +241,7 @@ export class OrganizationClient extends EventEmitter {
     return allGood;
   }
 
-  async instantiate(chaincodeId, chaincodeVersion ) {
+  async instantiate(chaincodeId, chaincodeVersion, ...args ) {
     let proposalResponses, proposal;
     const txId = this._client.newTransactionID();
     try {
@@ -250,16 +250,16 @@ export class OrganizationClient extends EventEmitter {
         chaincodeId,
         chaincodeVersion,
         fcn: 'init',
-        args: ['admin','admin','admin'],
+        args: marshalArgs(args),
         txId
       }
       //console.log(args);
-      console.log(request);
+      //console.log(request);
       const results = await this._channel.sendInstantiateProposal(request);
       proposalResponses = results[0];
       proposal = results[1];
-      //console.log(proposalResponses);
-      //console.log(proposal);
+      console.log(proposalResponses);
+      console.log(proposal);
 
       let allGood = proposalResponses
         .every(pr => pr.response && pr.response.status == 200);
@@ -308,7 +308,7 @@ export class OrganizationClient extends EventEmitter {
     }
   }
 
-  async invoke(chaincodeId, chaincodeVersion, fcn, args) {
+  async invoke(chaincodeId, chaincodeVersion, fcn, ...args) {
     let proposalResponses, proposal;
     const txId = this._client.newTransactionID();
     try {
@@ -316,7 +316,7 @@ export class OrganizationClient extends EventEmitter {
         chaincodeId,
         chaincodeVersion,
         fcn,
-        args: args,
+        args: marshalArgs(args),
         txId
       };
       const results = await this._channel.sendTransactionProposal(request);
@@ -377,12 +377,12 @@ export class OrganizationClient extends EventEmitter {
     }
   }
 
-  async query(chaincodeId, chaincodeVersion, fcn, args) {
+  async query(chaincodeId, chaincodeVersion, fcn, ...args) {
     const request = {
       chaincodeId,
       chaincodeVersion,
       fcn,
-      args: args,
+      args: marshalArgs(args),
       txId: this._client.newTransactionID(),
     };
     return unmarshalResult(await this._channel.queryByChaincode(request));
@@ -472,26 +472,26 @@ export function wrapError(message, innerError) {
   throw error;
 }
 
-// export function marshalArgs(args) {
-//   if (!args) {
-//     return args;
-//   }
+export function marshalArgs(args) {
+  if (!args) {
+    return args;
+  }
 
-//   if (typeof args === 'string') {
-//     return [args];
-//   }
+  if (typeof args === 'string') {
+    return [args];
+  }
 
-//   let snakeArgs = camelToSnakeCase(args);
+  let snakeArgs = camelToSnakeCase(args);
 
-//   if (Array.isArray(args)) {
-//     return snakeArgs.map(
-//       arg => typeof arg === 'object' ? JSON.stringify(arg) : arg.toString());
-//   }
+  if (Array.isArray(args)) {
+    return snakeArgs.map(
+      arg => typeof arg === 'object' ? JSON.stringify(arg) : arg.toString());
+  }
 
-//   if (typeof args === 'object') {
-//     return [JSON.stringify(snakeArgs)];
-//   }
-// }
+  if (typeof args === 'object') {
+    return [JSON.stringify(snakeArgs)];
+  }
+}
 
 function unmarshalResult(result) {
   if (!Array.isArray(result)) {

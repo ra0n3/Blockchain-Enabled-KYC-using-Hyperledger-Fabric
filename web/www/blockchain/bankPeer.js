@@ -9,20 +9,20 @@ import network from './invoke';
 
 import * as util from 'util' // has no default export
 
-// export async function authenticateUser(username, password) {
-//   if (!isReady()) {
-//     return;
-//   }
-//   try {
-//     let authenticated = await query('user_authenticate', { username, password });
-//     if (authenticated === undefined || authenticated === null) {
-//       throw new Error('Unknown error, invalid response!');
-//     }
-//     return authenticated;
-//   } catch (e) {
-//     throw wrapError(`Error authenticating user: ${e.message}`, e);
-//   }
-// }
+export async function authenticateUser(username, password) {
+  if (!isReady()) {
+    return;
+  }
+  try {
+    let authenticated = await query('user_authenticate', { username, password });
+    if (authenticated === undefined || authenticated === null) {
+      throw new Error('Unknown error, invalid response!');
+    }
+    return authenticated;
+  } catch (e) {
+    throw wrapError(`Error authenticating user: ${e.message}`, e);
+  }
+}
 
 export async function getUserInfo(username) {
   if (!isReady()) {

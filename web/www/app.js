@@ -4,6 +4,7 @@ import { Server } from 'http';
 import express from 'express';
 import socketIo from 'socket.io';
 import configureExpress from './config/express';
+
 // import shopRouter, { wsConfig as shopWsConfig }
 //   from './routers/shop.router';
 // import policeRouter, { wsConfig as policeWsConfig }
@@ -18,7 +19,17 @@ const BANK_ROOT_URL = '/bank';
 // const REPAIR_SHOP_ROOT_URL = '/repair-shop';
 // const SHOP_ROOT_URL = '/shop';
 
-const app = express();
+// const app = express();
+var app = express()
+app.use(function(req, res, next) {
+    if (req.headers.origin) {
+        res.header('Access-Control-Allow-Origin', '*')
+        res.header('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization')
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE')
+        if (req.method === 'OPTIONS') return res.send(200)
+    }
+    next()
+})
 const httpServer = new Server(app);
 
 // Setup web sockets
